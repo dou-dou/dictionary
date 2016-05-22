@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/tools"
+    android:id="@+id/toolbar"
+    android:background="?attr/colorPrimary"
+    android:minHeight="?attr/actionBarSize"
+    app:navigation="@drawable/press_back"
+    app:title=" ">
+    <EditText
+        android:id="@+id/edit_search"
+        android:layout_width="250dp"
+        android:layout_height="35dp"
+        android:hint="请输入单词"
+        android:textColor="@color/color_light_gray"
+        android:textColorHint="@color/color_light_gray"
+        android:background="@drawable/edittext_search_shape"
+        android:layout_marginLeft="0dp"/>
+    <ImageView
+        android:layout_width="10dp"
+        android:layout_height="wrap_content" />
+    <ImageButton
+        android:id="@+id/button_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_search_white_36pt"
+        />
+
+
+</android.support.v7.widget.Toolbar>
