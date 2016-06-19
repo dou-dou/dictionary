@@ -83,16 +83,17 @@ public class JsonUtility {
         }
     public static Map<String,Object> parseJSONWithJSONObject_Everyword(String jsonData) throws JSONException {
         Map<String,Object> everyword_map=new HashMap<>();
-        Log.i("qqqq","picture1"+jsonData);
+
         JSONObject jsonObject=new JSONObject(jsonData);
-        Log.i("qqqq","picture2");
+
         everyword_map.put("tts",jsonObject.getString("tts"));
 
         everyword_map.put("content",jsonObject.getString("content"));
         everyword_map.put("note",jsonObject.getString("note"));
+        everyword_map.put("love",jsonObject.getString("love"));
         everyword_map.put("translation",jsonObject.getString("translation"));
         everyword_map.put("picture",jsonObject.getString("picture"));
-        Log.i("qqqq","picture");
+
         everyword_map.put("picture2",jsonObject.getString("picture2"));
         everyword_map.put("caption",jsonObject.getString("caption"));
         everyword_map.put("dateline",jsonObject.getString("dateline"));

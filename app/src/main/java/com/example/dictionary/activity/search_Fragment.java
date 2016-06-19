@@ -36,6 +36,7 @@ public class search_Fragment extends Fragment{
     private TextView tv_word;
     private static final String array_month[]={"0","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
     private static final String array_change[]={"deadline"," emotions","vast ",};
+    Map<String,Object> every_word_map;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.search_main,container,false);
@@ -56,7 +57,6 @@ public class search_Fragment extends Fragment{
         final int month=calendar.get(Calendar.MONTH)+1;
         final int day=calendar.get(Calendar.DAY_OF_MONTH);
         String address="http://open.iciba.com/dsapi/?date="+year+"-"+month+"-"+day;//标准化输入是2016-01-01，但是2016-1-1正常，所以没有标准化
-        Log.i("qqqq",address);
         HttpUtil.sendHttpRequest(address, new HttpCallbackListener() {
             @Override
             public void onFinish(final String response) {
@@ -64,7 +64,6 @@ public class search_Fragment extends Fragment{
                     @Override
                     public void run() {
                         try {
-                            Map<String,Object> every_word_map;
                             every_word_map = JsonUtility.parseJSONWithJSONObject_Everyword(response);
                             String imageaddr=every_word_map.get("picture2").toString();
                             DisplayImageOptions options=ImageUtility.imageLoader(getActivity());
@@ -101,8 +100,20 @@ public class search_Fragment extends Fragment{
 
             }
         });
+        iv_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Everyword_Fragment fragment=new Everyword_Fragment();
+                FragmentManager manager=getFragmentManager();
+                FragmentTransaction transaction=manager.beginTransaction();
+                transaction.replace(R.id.framement_alternative,fragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
 
     }
+
 
 
 

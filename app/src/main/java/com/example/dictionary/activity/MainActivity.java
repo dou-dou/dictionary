@@ -127,7 +127,8 @@ public class MainActivity extends FragmentActivity implements NavigationView.OnN
         if (id == R.id.nav_search) {
             InitUI();
         } else if (id == R.id.nav_sentence) {
-
+            transaction.replace(R.id.framement_alternative,new Everyword_Fragment());
+            transaction.commit();
         } else if (id == R.id.nav_rawbook) {
 
         } else if (id == R.id.nav_manage) {
