@@ -2,15 +2,20 @@ package com.example.dictionary.activity;
 
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.dictionary.R;
 import com.example.dictionary.util.HttpCallbackListener;
@@ -48,6 +53,14 @@ public class Everyword_Fragment extends Fragment{
         bt_like= (Button) view.findViewById(R.id.bt_like);
         bt_tts= (Button) view.findViewById(R.id.bt_tts);
         Init();
+
+        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        ImageButton imageButton_search = (ImageButton) getActivity().findViewById(R.id.button_search);
+        EditText editText_search = (EditText) getActivity().findViewById(R.id.edit_search);
+        imageButton_search.setVisibility(View.GONE);
+        editText_search.setVisibility(View.GONE);
+        toolbar.setTitle("每日一句");
+
         return view;
     }
 

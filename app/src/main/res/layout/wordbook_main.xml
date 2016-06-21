@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="共添加生词个数"
+        android:textSize="15sp"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/color_white"/>
+    <TextView
+        android:id="@+id/tv_wordsum"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:textSize="120sp"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/color_white"
+        android:text="0"
+        android:gravity="center"
+
+        />
+    <ListView
+        android:id="@+id/lv_filetype"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </ListView>
+</LinearLayout>

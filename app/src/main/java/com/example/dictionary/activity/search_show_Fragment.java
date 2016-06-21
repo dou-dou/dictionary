@@ -1,26 +1,27 @@
 package com.example.dictionary.activity;
 
 import android.graphics.Typeface;
-import android.media.Image;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.dictionary.R;
+import com.example.dictionary.db.DBOpenHelper;
+import com.example.dictionary.model.DictionaryDB;
+import com.example.dictionary.model.Word;
 import com.example.dictionary.util.HttpCallbackListener;
 import com.example.dictionary.util.HttpUtil;
 import com.example.dictionary.util.JsonUtility;
-import com.example.dictionary.util.Serializable_Map;
 
 import org.json.JSONException;
 
@@ -31,7 +32,7 @@ import java.util.Map;
 /**
  * Created by doudou on 2016/5/15.
  */
-public class search_show_Fragment extends Fragment implements View.OnClickListener{
+public class Search_show_Fragment extends Fragment implements View.OnClickListener{
 
     private TextView textView_ph_en;
     private TextView textView_ph_am;
@@ -39,11 +40,15 @@ public class search_show_Fragment extends Fragment implements View.OnClickListen
     private TextView textView_exchange;
     private ImageButton bt_ph_en_map3;
     private ImageButton bt_ph_am_map3;
+    private Button bt_addWordBook;
     private String ph_en_map3_src;
     private String ph_am_map3_src;
+    private String exchange_string="";
+    private String search_word;
+    private String parts_string="";
     private static  final String  parts_type[]={"n.","adj.","adv.","vi.","vt.","v.","abbr.","prep.","conj.","vt.&vi.","int."};
-    public static search_show_Fragment newInstance(String search_word) {
-                search_show_Fragment f = new search_show_Fragment();
+    public static Search_show_Fragment newInstance(String search_word) {
+                Search_show_Fragment f = new Search_show_Fragment();
                 Bundle bundle=new Bundle();
                 bundle.putString("search_word", search_word);
                 f.setArguments(bundle);
@@ -59,13 +64,31 @@ public class search_show_Fragment extends Fragment implements View.OnClickListen
         textView_exchange= (TextView) view.findViewById(R.id.exchange_text);
         bt_ph_en_map3= (ImageButton) view.findViewById(R.id.ph_en_mp3_button);
         bt_ph_am_map3= (ImageButton) view.findViewById(R.id.ph_am_mp3_button);
+        bt_addWordBook= (Button) view.findViewById(R.id.search_addbook);
         bt_ph_en_map3.setOnClickListener(this);
         bt_ph_am_map3.setOnClickListener(this);
-        Typeface mFace = Typeface.createFromAsset(getActivity().getAssets(), "font/Kingsoft_Phonetic_Plain.ttf");
-        textView_ph_en.setTypeface(mFace);
-        textView_ph_am.setTypeface(mFace);
-        Bundle bundle= getArguments();
-        queryFromServer(bundle.get("search_word").toString());
+       // Typeface mFace = Typeface.createFromAsset(getActivity().getAssets(), "font/Kingsoft_Phonetic_Plain.ttf");
+       // textView_ph_en.setTypeface(mFace);
+       // textView_ph_am.setTypeface(mFace);
+          Bundle bundle= getArguments();
+        bt_addWordBook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(DictionaryDB.querySameWord(search_word)){
+                    Toast.makeText(getActivity(),"生词表中已经有这个单词了！",Toast.LENGTH_LONG).show();
+                }else{
+                    Word word=new Word();
+                    word.setWord(search_word);
+                    word.setParts(parts_string);
+                    word.setPh_en_map3_src(ph_en_map3_src);
+                    DictionaryDB.saveWord(word);
+                    Toast.makeText(getActivity(),"已经存入生词表",Toast.LENGTH_LONG).show();
+                }
+
+            }
+        });
+        search_word=bundle.get("search_word").toString();
+        queryFromServer(search_word);
 
         return view;
     }
@@ -74,11 +97,11 @@ public class search_show_Fragment extends Fragment implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.ph_en_mp3_button:
-                Log.i("src",ph_en_map3_src+"-----");
+
                 load_mp3(ph_en_map3_src);
                 break;
             case R.id.ph_am_mp3_button:
-                Log.i("src",ph_am_map3_src+"++++++");
+
                 load_mp3(ph_am_map3_src);
 
                 break;
@@ -114,7 +137,7 @@ public class search_show_Fragment extends Fragment implements View.OnClickListen
 
         Map<String,List> map_part2=map_show.get("Map_part2");
 
-        String parts_string="";
+
         for(int k=0;k<parts_type.length;k++)
         {
             String type=parts_type[k];
@@ -128,10 +151,10 @@ public class search_show_Fragment extends Fragment implements View.OnClickListen
                 }
                 parts_string=parts_string+"\n";
             }
-            Log.i("count",parts_string);
+
         }
         textView_parts.setText(parts_string);
-        String exchange_string="";
+
 
         if(map_part1.containsKey("word_pl")){
             exchange_string=exchange_string+"复数： "+map_part1.get("word_pl")+"    ";
@@ -159,6 +182,7 @@ public class search_show_Fragment extends Fragment implements View.OnClickListen
             textView_exchange.setVisibility(View.GONE);
         }
         textView_exchange.setText(exchange_string);
+
     }
     private void queryFromServer(String content)
     {

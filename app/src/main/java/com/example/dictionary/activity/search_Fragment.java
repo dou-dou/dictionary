@@ -5,11 +5,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,7 +31,7 @@ import java.util.Map;
 /**
  * Created by doudou on 2016/5/15.
  */
-public class search_Fragment extends Fragment{
+public class Search_Fragment extends Fragment{
     private ImageView iv_image;
     private TextView tv_data,tv_chanese;
     private Button bt_change;
@@ -48,6 +50,13 @@ public class search_Fragment extends Fragment{
         int j=(int)(Math.random() * 3);
         tv_word.setText(array_change[j]);
         UI_show_data();
+
+        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        ImageButton imageButton_search = (ImageButton) getActivity().findViewById(R.id.button_search);
+        EditText editText_search = (EditText) getActivity().findViewById(R.id.edit_search);
+        imageButton_search.setVisibility(View.VISIBLE);
+        editText_search.setVisibility(View.VISIBLE);
+        toolbar.setTitle("");
 
         return view;    }
 
@@ -94,7 +103,7 @@ public class search_Fragment extends Fragment{
             public void onClick(View v) {
                 FragmentManager manager=getFragmentManager();
                 FragmentTransaction transaction=manager.beginTransaction();
-                transaction.replace(R.id.framement_alternative,search_show_Fragment.newInstance(tv_word.getText().toString()));
+                transaction.replace(R.id.framement_alternative, Search_show_Fragment.newInstance(tv_word.getText().toString()));
                 transaction.addToBackStack(null);
                 transaction.commit();
 

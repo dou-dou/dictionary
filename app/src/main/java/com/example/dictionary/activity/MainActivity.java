@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentTransaction;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,15 +16,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.example.dictionary.R;
-import com.example.dictionary.util.HttpCallbackListener;
-import com.example.dictionary.util.HttpUtil;
-import com.example.dictionary.util.JsonUtility;
-
-import org.json.JSONException;
-import java.util.Map;
+import com.example.dictionary.db.DBOpenHelper;
+import com.example.dictionary.model.DictionaryDB;
 
 public class MainActivity extends FragmentActivity implements NavigationView.OnNavigationItemSelectedListener {
     private ImageButton imageButton_search;
@@ -34,6 +28,7 @@ public class MainActivity extends FragmentActivity implements NavigationView.OnN
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         imageButton_search = (ImageButton) findViewById(R.id.button_search);
@@ -46,6 +41,7 @@ public class MainActivity extends FragmentActivity implements NavigationView.OnN
         toggle.syncState();
         InitUI();
 
+        DictionaryDB.getInstance(this);//创建数据库
         navigationView.setNavigationItemSelectedListener(this);
 
         imageButton_search.setOnClickListener(new View.OnClickListener() {
@@ -56,7 +52,7 @@ public class MainActivity extends FragmentActivity implements NavigationView.OnN
                 if (!et_word.trim().isEmpty()) {
                     android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
-                    transaction.replace(R.id.framement_alternative, search_show_Fragment.newInstance(et_word));
+                    transaction.replace(R.id.framement_alternative, Search_show_Fragment.newInstance(et_word));
                     transaction.commit();
                 }
             }
@@ -76,7 +72,7 @@ public class MainActivity extends FragmentActivity implements NavigationView.OnN
             @Override
             public void afterTextChanged(Editable s) {
                 if (editText_search.getText().toString().trim().isEmpty()) {
-                    search_Fragment _searchFragment = new search_Fragment();
+                    Search_Fragment _searchFragment = new Search_Fragment();
                     android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
                     transaction.replace(R.id.framement_alternative, _searchFragment);
@@ -126,16 +122,18 @@ public class MainActivity extends FragmentActivity implements NavigationView.OnN
 
         if (id == R.id.nav_search) {
             InitUI();
+
         } else if (id == R.id.nav_sentence) {
             transaction.replace(R.id.framement_alternative,new Everyword_Fragment());
             transaction.commit();
         } else if (id == R.id.nav_rawbook) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+            transaction.replace(R.id.framement_alternative,new WordBook_Fragment());
+            transaction.commit();
+//        } else if (id == R.id.nav_manage) {
+//
+//        } else if (id == R.id.nav_share) {
+//
+//        } else if (id == R.id.nav_send) {
 
         }
 
@@ -144,7 +142,7 @@ public class MainActivity extends FragmentActivity implements NavigationView.OnN
         return true;
     }
     private void InitUI(){
-        search_Fragment fragment_show=new search_Fragment();
+        Search_Fragment fragment_show=new Search_Fragment();
         android.support.v4.app.FragmentManager init_fragmentManager=getSupportFragmentManager();
         FragmentTransaction init_transaction=init_fragmentManager.beginTransaction();
         init_transaction.replace(R.id.framement_alternative,fragment_show);
