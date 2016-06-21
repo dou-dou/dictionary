@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
+
 import com.example.dictionary.Adapter.Word_Detail_Adapter;
 import com.example.dictionary.R;
 import com.example.dictionary.model.DictionaryDB;
